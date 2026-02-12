@@ -10,7 +10,8 @@ jobs:
   release:
     permissions:
       id-token: write # Required for OIDC
-      contents: read
+      contents: write
+      pull-requests: write
     name: Release
     runs-on: ubuntu-latest
     steps:
