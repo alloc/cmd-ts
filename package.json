@@ -11,7 +11,10 @@
 		"type": "git",
 		"url": "https://github.com/Schniz/cmd-ts"
 	},
-	"files": ["dist", "batteries"],
+	"files": [
+		"dist",
+		"batteries"
+	],
 	"scripts": {
 		"build": "tsc && tsc --project ./tsconfig.esm.json",
 		"lint": "biome check src test example",
@@ -56,6 +59,7 @@
 		"fs-extra": "11.3.0",
 		"husky": "9.1.7",
 		"infer-types": "0.0.2",
+		"lildocs": "^0.1.22",
 		"node-fetch": "3.3.2",
 		"request": "2.88.2",
 		"tempy": "3.1.0",
