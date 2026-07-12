@@ -4,5 +4,5 @@ Batteries, from the term "batteries included", are optional imports you can use 
 
 Here are some battery packs:
 
-- [File System](./batteries_file_system.md)
-- [URL](./batteries_url.md)
+- [File System](./file_system.md)
+- [URL](./url.md)

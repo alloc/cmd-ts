@@ -1,0 +1,22 @@
+{
+	"navigation": {
+		"order": [
+			"introduction.md",
+			"getting_started.md",
+			"completion.md",
+			"included_types.md",
+			"custom_types.md",
+			"batteries/index.md",
+			"batteries/file_system.md",
+			"batteries/url.md",
+			"parsers/index.md",
+			"parsers/positionals.md",
+			"parsers/options.md",
+			"parsers/flags.md",
+			"parsers/command.md",
+			"parsers/subcommands.md",
+			"parsers/binary.md",
+			"parsers/custom.md"
+		]
+	}
+}

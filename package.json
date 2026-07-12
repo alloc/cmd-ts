@@ -18,7 +18,6 @@
 	"scripts": {
 		"build": "tsc && tsc --project ./tsconfig.esm.json",
 		"lint": "biome check src test example",
-		"now-build": "mdbook build --dest-dir=public",
 		"start": "pnpm build --watch",
 		"prepublishOnly": "rm -rf dist && pnpm build && pnpm test",
 		"test": "vitest",
@@ -53,8 +52,6 @@
 		"@types/fs-extra": "11.0.4",
 		"@types/node-fetch": "2.6.12",
 		"@types/request": "2.48.12",
-		"cargo-mdbook": "0.4.4",
-		"docs-ts": "0.8.0",
 		"execa": "9.6.0",
 		"fs-extra": "11.3.0",
 		"husky": "9.1.7",
