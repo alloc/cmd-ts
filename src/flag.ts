@@ -6,6 +6,7 @@ import type {
 	ParsingResult,
 	Register,
 } from "./argparser";
+import { setCompletionMetadata } from "./completion";
 import type { Default, OnMissing } from "./default";
 import type {
 	Descriptive,
@@ -48,7 +49,7 @@ export function fullFlag<Decoder extends Type<boolean, any>>(
 	Partial<Descriptive> {
 	const decoder = extendType(boolean, config.type);
 
-	return {
+	const parser: ReturnType<typeof fullFlag> = {
 		description: config.description ?? config.type.description,
 		helpTopics() {
 			let usage = `--${config.long}`;
@@ -189,6 +190,12 @@ export function fullFlag<Decoder extends Type<boolean, any>>(
 			return decoded;
 		},
 	};
+	return setCompletionMetadata(parser, {
+		kind: "flag",
+		long: config.long,
+		short: config.short,
+		description: config.description ?? config.type.description,
+	});
 }
 
 type BooleanType = Type<boolean, boolean>;

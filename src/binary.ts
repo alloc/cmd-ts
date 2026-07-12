@@ -1,4 +1,9 @@
 import type { ParseContext } from "./argparser";
+import {
+	getCompletionMetadata,
+	setBinaryCompletion,
+	setCompletionMetadata,
+} from "./completion";
 import type { Named } from "./helpdoc";
 import type { Runner } from "./runner";
 
@@ -10,7 +15,7 @@ import type { Runner } from "./runner";
 export function binary<Command extends Runner<any, any> & Named>(
 	cmd: Command,
 ): Command {
-	return {
+	const binaryCommand = {
 		...cmd,
 		run(context: ParseContext) {
 			const name = cmd.name || context.nodes[1].raw;
@@ -21,4 +26,7 @@ export function binary<Command extends Runner<any, any> & Named>(
 			return cmd.run(context);
 		},
 	};
+	const metadata = getCompletionMetadata(cmd);
+	if (metadata) setCompletionMetadata(binaryCommand, metadata);
+	return setBinaryCompletion(binaryCommand) as Command;
 }

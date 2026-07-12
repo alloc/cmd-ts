@@ -6,6 +6,7 @@ import type {
 	ParsingError,
 	ParsingResult,
 } from "./argparser";
+import { type CompletionHandler, setCompletionMetadata } from "./completion";
 import type { Default, OnMissing } from "./default";
 import type { OutputOf } from "./from";
 import type {
@@ -22,13 +23,14 @@ import type { AllOrNothing } from "./utils";
 
 type OptionConfig<Decoder extends Type<string, any>> = LongDoc &
 	HasType<Decoder> &
-	Partial<Descriptive & EnvDoc & ShortDoc & OnMissing<OutputOf<Decoder>>> &
-	AllOrNothing<Default<OutputOf<Decoder>>>;
+	Partial<Descriptive & EnvDoc & ShortDoc & OnMissing<OutputOf<Decoder>>> & {
+		completion?: CompletionHandler;
+	} & AllOrNothing<Default<OutputOf<Decoder>>>;
 
 function fullOption<Decoder extends Type<string, any>>(
 	config: OptionConfig<Decoder>,
 ): ArgParser<OutputOf<Decoder>> & ProvidesHelp & Partial<Descriptive> {
-	return {
+	const parser: ReturnType<typeof fullOption> = {
 		description: config.description ?? config.type.description,
 		helpTopics() {
 			const displayName = config.type.displayName ?? "value";
@@ -175,6 +177,13 @@ function fullOption<Decoder extends Type<string, any>>(
 			return Result.ok(decoded.value);
 		},
 	};
+	return setCompletionMetadata(parser, {
+		kind: "option",
+		long: config.long,
+		short: config.short,
+		description: config.description ?? config.type.description,
+		completion: config.completion,
+	});
 }
 
 type StringType = Type<string, string>;
@@ -191,8 +200,9 @@ type StringType = Type<string, string>;
 export function option<Decoder extends Type<string, any>>(
 	config: LongDoc &
 		HasType<Decoder> &
-		Partial<Descriptive & EnvDoc & ShortDoc & OnMissing<OutputOf<Decoder>>> &
-		AllOrNothing<Default<OutputOf<Decoder>>>,
+		Partial<Descriptive & EnvDoc & ShortDoc & OnMissing<OutputOf<Decoder>>> & {
+			completion?: CompletionHandler;
+		} & AllOrNothing<Default<OutputOf<Decoder>>>,
 ): ArgParser<OutputOf<Decoder>> & ProvidesHelp & Partial<Descriptive>;
 export function option(
 	config: LongDoc &
@@ -202,13 +212,16 @@ export function option(
 				EnvDoc &
 				ShortDoc &
 				OnMissing<OutputOf<StringType>>
-		> &
-		AllOrNothing<Default<OutputOf<StringType>>>,
+		> & { completion?: CompletionHandler } & AllOrNothing<
+			Default<OutputOf<StringType>>
+		>,
 ): ArgParser<OutputOf<StringType>> & ProvidesHelp & Partial<Descriptive>;
 export function option(
 	config: LongDoc &
 		Partial<HasType<any>> &
-		Partial<Descriptive & EnvDoc & ShortDoc>,
+		Partial<Descriptive & EnvDoc & ShortDoc> & {
+			completion?: CompletionHandler;
+		},
 ): ArgParser<OutputOf<any>> & ProvidesHelp & Partial<Descriptive> {
 	return fullOption({
 		type: string,

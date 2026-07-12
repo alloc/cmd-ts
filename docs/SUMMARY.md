@@ -2,6 +2,7 @@
 
 - [Introduction](./introduction.md)
 - [Getting Started](./getting_started.md)
+- [Shell Completion](./completion.md)
 - [Included Types](./included_types.md)
 - [Custom Types](./custom_types.md)
 - [Battery Packs](./batteries.md)

@@ -9,6 +9,11 @@ import type {
 	ParsingResult,
 } from "./argparser";
 import { createCircuitBreaker, handleCircuitBreaker } from "./circuitbreaker";
+import {
+	type CompletionProgram,
+	getCompletionMetadata,
+	setCompletionMetadata,
+} from "./completion";
 import type { From } from "./from";
 import {
 	type Example,
@@ -113,7 +118,10 @@ export function subcommands<
 		}
 	}
 
-	return {
+	const parser: ArgParser<Output<Commands>> &
+		Named &
+		Partial<Descriptive & Versioned> &
+		Runner<Output<Commands>, RunnerOutput<Commands>> = {
 		version: config.version,
 		description: config.description,
 		name: config.name,
@@ -206,6 +214,21 @@ export function subcommands<
 			});
 		},
 	};
+	return setCompletionMetadata(parser, {
+		kind: "subcommands",
+		name: config.name,
+		description: config.description,
+		commands: Object.fromEntries(
+			Object.entries(config.cmds).flatMap(([name, cmd]) => {
+				const metadata = getCompletionMetadata(cmd);
+				return metadata &&
+					"kind" in metadata &&
+					(metadata.kind === "command" || metadata.kind === "subcommands")
+					? [[name, metadata as CompletionProgram]]
+					: [];
+			}),
+		),
+	});
 }
 
 function flatMap<T, R>(array: T[], f: (t: T) => R[]): R[] {

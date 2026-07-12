@@ -5,6 +5,7 @@ import type {
 	ParsingError,
 	ParsingResult,
 } from "./argparser";
+import { setCompletionMetadata } from "./completion";
 import { boolean } from "./flag";
 import type { From, OutputOf } from "./from";
 import type { Descriptive, LongDoc, ProvidesHelp, ShortDoc } from "./helpdoc";
@@ -22,7 +23,7 @@ type MultiFlagConfig<Decoder extends From<boolean[], any>> = HasType<Decoder> &
 export function multiflag<Decoder extends From<boolean[], any>>(
 	config: MultiFlagConfig<Decoder>,
 ): ArgParser<OutputOf<Decoder>> & ProvidesHelp {
-	return {
+	const parser: ReturnType<typeof multiflag> = {
 		helpTopics() {
 			let usage = `--${config.long}`;
 			if (config.short) {
@@ -94,4 +95,10 @@ export function multiflag<Decoder extends From<boolean[], any>>(
 			return multiDecoded;
 		},
 	};
+	return setCompletionMetadata(parser, {
+		kind: "flag",
+		long: config.long,
+		short: config.short,
+		description: config.description,
+	});
 }

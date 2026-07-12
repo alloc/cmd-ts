@@ -7,6 +7,7 @@ import type {
 	ParsingResult,
 	Register,
 } from "./argparser";
+import { type CompletionHandler, setCompletionMetadata } from "./completion";
 import type { Default, OnMissing } from "./default";
 import type { OutputOf } from "./from";
 import type { Descriptive, LongDoc, ProvidesHelp, ShortDoc } from "./helpdoc";
@@ -21,7 +22,7 @@ type MultiOptionConfig<Decoder extends Type<string[], any>> = HasType<Decoder> &
 			Descriptive &
 			Default<OutputOf<Decoder>> &
 			OnMissing<OutputOf<Decoder>>
-	>;
+	> & { completion?: CompletionHandler };
 
 /**
  * Like `option`, but can accept multiple options, and expects a decoder from a list of strings.
@@ -30,7 +31,7 @@ type MultiOptionConfig<Decoder extends Type<string[], any>> = HasType<Decoder> &
 export function multioption<Decoder extends Type<string[], any>>(
 	config: MultiOptionConfig<Decoder>,
 ): ArgParser<OutputOf<Decoder>> & ProvidesHelp & Register {
-	return {
+	const parser: ReturnType<typeof multioption> = {
 		helpTopics() {
 			const displayName = config.type.displayName ?? "value";
 			let usage = `--${config.long} <${displayName}>`;
@@ -162,4 +163,11 @@ export function multioption<Decoder extends Type<string[], any>>(
 			return multiDecoded;
 		},
 	};
+	return setCompletionMetadata(parser, {
+		kind: "option",
+		long: config.long,
+		short: config.short,
+		description: config.description,
+		completion: config.completion,
+	});
 }

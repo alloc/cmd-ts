@@ -7,6 +7,7 @@ import type {
 	ParsingResult,
 } from "./argparser";
 import { createCircuitBreaker, handleCircuitBreaker } from "./circuitbreaker";
+import { getCompletionMetadata, setCompletionMetadata } from "./completion";
 import {
 	type CommandHelpData,
 	type Example,
@@ -65,7 +66,12 @@ export function command<
 	const argEntries = entries(config.args);
 	const circuitbreaker = createCircuitBreaker(!!config.version);
 
-	return {
+	const parser: ArgParser<Output<Arguments>> &
+		PrintHelp &
+		ProvidesHelp &
+		Named &
+		Runner<Output<Arguments>, ReturnType<Handler>> &
+		Partial<Versioned & Descriptive & Aliased> = {
 		name: config.name,
 		aliases: config.aliases,
 		handler: config.handler,
@@ -159,4 +165,23 @@ export function command<
 			return Result.ok(await this.handler(parsed.value));
 		},
 	};
+	return setCompletionMetadata(parser, {
+		kind: "command",
+		name: config.name,
+		description: config.description,
+		aliases: config.aliases,
+		arguments: argEntries.flatMap(([argName, argument]) => {
+			const metadata = getCompletionMetadata(argument);
+			return metadata &&
+				"kind" in metadata &&
+				metadata.kind !== "command" &&
+				metadata.kind !== "subcommands"
+				? [
+						metadata.kind === "positional" || metadata.kind === "rest"
+							? { ...metadata, name: String(argName) }
+							: metadata,
+					]
+				: [];
+		}),
+	});
 }

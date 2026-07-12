@@ -36,6 +36,7 @@
 		"trailingComma": "es5"
 	},
 	"dependencies": {
+		"@bomb.sh/tab": "^0.0.19",
 		"chalk": "^5.4.1",
 		"debug": "^4.4.1",
 		"didyoumean": "^1.2.2",

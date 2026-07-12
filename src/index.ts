@@ -22,6 +22,7 @@ export {
 export { option } from "./option";
 export { positional } from "./positional";
 export { dryRun, runSafely, run, parse, type Runner } from "./runner";
+export type { Complete, CompletionHandler } from "./completion";
 export { restPositionals } from "./restPositionals";
 export { multiflag } from "./multiflag";
 export { multioption } from "./multioption";

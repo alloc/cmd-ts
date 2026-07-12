@@ -1,14 +1,17 @@
 import * as Result from "./Result";
 import type { ArgParser } from "./argparser";
+import { type CompletionHandler, setCompletionMetadata } from "./completion";
 import type { Descriptive, Displayed, ProvidesHelp } from "./helpdoc";
 import type { AstNode } from "./newparser/parser";
 
 export function rest(
-	config?: Partial<Displayed & Descriptive>,
+	config?: Partial<Displayed & Descriptive> & {
+		completion?: CompletionHandler;
+	},
 ): ArgParser<string[]> & ProvidesHelp {
-	return {
+	const displayName = config?.displayName ?? "arg";
+	const parser: ReturnType<typeof rest> = {
 		helpTopics() {
-			const displayName = config?.displayName ?? "arg";
 			return [
 				{
 					usage: `[...${displayName}]`,
@@ -61,6 +64,12 @@ export function rest(
 			return Result.ok(strings);
 		},
 	};
+	return setCompletionMetadata(parser, {
+		kind: "rest",
+		name: displayName,
+		description: config?.description,
+		completion: config?.completion,
+	});
 }
 
 function getOriginal(node: {

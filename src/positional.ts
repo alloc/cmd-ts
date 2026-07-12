@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import * as Result from "./Result";
 import type { ArgParser, ParseContext, ParsingResult } from "./argparser";
+import { type CompletionHandler, setCompletionMetadata } from "./completion";
 import type { Default } from "./default";
 import type { OutputOf } from "./from";
 import type { Descriptive, Displayed, ProvidesHelp } from "./helpdoc";
@@ -10,8 +11,9 @@ import { string } from "./types";
 import type { AllOrNothing } from "./utils";
 
 type PositionalConfig<Decoder extends Type<string, any>> = HasType<Decoder> &
-	Partial<Displayed & Descriptive> &
-	AllOrNothing<Default<OutputOf<Decoder>>>;
+	Partial<Displayed & Descriptive> & {
+		completion?: CompletionHandler;
+	} & AllOrNothing<Default<OutputOf<Decoder>>>;
 
 type PositionalParser<Decoder extends Type<string, any>> = ArgParser<
 	OutputOf<Decoder>
@@ -24,7 +26,7 @@ function fullPositional<Decoder extends Type<string, any>>(
 ): PositionalParser<Decoder> {
 	const displayName = config.displayName ?? config.type.displayName ?? "arg";
 
-	return {
+	const parser: ReturnType<typeof fullPositional> = {
 		description: config.description ?? config.type.description,
 		helpTopics() {
 			const defaults: string[] = [];
@@ -102,6 +104,12 @@ function fullPositional<Decoder extends Type<string, any>>(
 			return Result.ok(decoded.value);
 		},
 	};
+	return setCompletionMetadata(parser, {
+		kind: "positional",
+		name: displayName,
+		description: config.description ?? config.type.description,
+		completion: config.completion,
+	});
 }
 
 type StringType = Type<string, string>;
@@ -115,13 +123,17 @@ type StringType = Type<string, string>;
  * @param config positional argument config
  */
 export function positional<Decoder extends Type<string, any>>(
-	config: HasType<Decoder> & Partial<Displayed & Descriptive>,
+	config: HasType<Decoder> &
+		Partial<Displayed & Descriptive> & { completion?: CompletionHandler },
 ): PositionalParser<Decoder>;
 export function positional(
-	config?: Partial<HasType<never> & Displayed & Descriptive>,
+	config?: Partial<HasType<never> & Displayed & Descriptive> & {
+		completion?: CompletionHandler;
+	},
 ): PositionalParser<StringType>;
 export function positional(
-	config?: Partial<HasType<any>> & Partial<Displayed & Descriptive>,
+	config?: Partial<HasType<any>> &
+		Partial<Displayed & Descriptive> & { completion?: CompletionHandler },
 ): PositionalParser<any> {
 	return fullPositional({
 		type: string,

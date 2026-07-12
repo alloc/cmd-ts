@@ -5,6 +5,7 @@ import type {
 	ParsingResult,
 	Register,
 } from "./argparser";
+import { runCompletion } from "./completion";
 import { Exit } from "./effects";
 import { errorBox } from "./errorBox";
 import type { PrintHelp, Versioned } from "./helpdoc";
@@ -43,6 +44,8 @@ export async function runSafely<R extends Runner<any, any>>(
 	ap: R,
 	strings: string[],
 ): Promise<Result<Exit, Into<R>>> {
+	if (await runCompletion(ap, strings)) return ok(undefined as Into<R>);
+
 	const hotPath: string[] = [];
 	const nodes = parseCommon(ap, strings);
 

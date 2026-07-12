@@ -5,6 +5,7 @@ import type {
 	ParsingError,
 	ParsingResult,
 } from "./argparser";
+import { type CompletionHandler, setCompletionMetadata } from "./completion";
 import type { OutputOf } from "./from";
 import type { Descriptive, Displayed, ProvidesHelp } from "./helpdoc";
 import type { PositionalArgument } from "./newparser/parser";
@@ -12,7 +13,10 @@ import type { HasType, Type } from "./type";
 import { string } from "./types";
 
 type RestPositionalsConfig<Decoder extends Type<string, any>> =
-	HasType<Decoder> & Partial<Displayed & Descriptive>;
+	HasType<Decoder> &
+		Partial<Displayed & Descriptive> & {
+			completion?: CompletionHandler;
+		};
 
 /**
  * Read all the positionals and decode them using the type provided.
@@ -22,10 +26,9 @@ type RestPositionalsConfig<Decoder extends Type<string, any>> =
 function fullRestPositionals<Decoder extends Type<string, any>>(
 	config: RestPositionalsConfig<Decoder>,
 ): ArgParser<OutputOf<Decoder>[]> & ProvidesHelp {
-	return {
+	const displayName = config.displayName ?? config.type.displayName ?? "arg";
+	const parser: ReturnType<typeof fullRestPositionals> = {
 		helpTopics() {
-			const displayName =
-				config.displayName ?? config.type.displayName ?? "arg";
 			return [
 				{
 					usage: `[...${displayName}]`,
@@ -72,6 +75,12 @@ function fullRestPositionals<Decoder extends Type<string, any>>(
 			return Result.ok(results);
 		},
 	};
+	return setCompletionMetadata(parser, {
+		kind: "rest",
+		name: displayName,
+		description: config.description ?? config.type.description,
+		completion: config.completion,
+	});
 }
 
 type StringType = Type<string, string>;
@@ -89,13 +98,17 @@ type RestPositionalsParser<Decoder extends Type<string, any>> = ArgParser<
  * @param config rest positionals argument config
  */
 export function restPositionals<Decoder extends Type<string, any>>(
-	config: HasType<Decoder> & Partial<Displayed & Descriptive>,
+	config: HasType<Decoder> &
+		Partial<Displayed & Descriptive> & { completion?: CompletionHandler },
 ): RestPositionalsParser<Decoder>;
 export function restPositionals(
-	config?: Partial<HasType<never> & Displayed & Descriptive>,
+	config?: Partial<HasType<never> & Displayed & Descriptive> & {
+		completion?: CompletionHandler;
+	},
 ): RestPositionalsParser<StringType>;
 export function restPositionals(
-	config?: Partial<HasType<any>> & Partial<Displayed & Descriptive>,
+	config?: Partial<HasType<any>> &
+		Partial<Displayed & Descriptive> & { completion?: CompletionHandler },
 ): RestPositionalsParser<any> {
 	return fullRestPositionals({
 		type: string,
