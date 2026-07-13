@@ -1,8 +1,8 @@
-import createDebugger from "debug";
+import { createDebug } from "obug";
 import type { RegisterOptions } from "../argparser";
 import type { Token } from "./tokenizer";
 
-const debug = createDebugger("cmd-ts:parser");
+const debug = createDebug("cmd-ts:parser");
 
 export type AstNode =
 	| Value
