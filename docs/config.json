@@ -1,22 +1,24 @@
 {
 	"navigation": {
 		"order": [
-			"introduction.md",
-			"getting_started.md",
-			"completion.md",
-			"included_types.md",
-			"custom_types.md",
-			"batteries/index.md",
-			"batteries/file_system.md",
-			"batteries/url.md",
-			"parsers/index.md",
-			"parsers/positionals.md",
-			"parsers/options.md",
-			"parsers/flags.md",
-			"parsers/command.md",
-			"parsers/subcommands.md",
-			"parsers/binary.md",
-			"parsers/custom.md"
+			"index.md",
+			"getting-started.md",
+			"guides/add-options-and-flags.md",
+			"guides/accept-positional-arguments.md",
+			"guides/build-subcommands.md",
+			"guides/validate-input.md",
+			"guides/add-shell-completion.md",
+			"guides/customize-help.md",
+			"guides/test-and-embed.md",
+			"concepts/parsers-and-runners.md",
+			"concepts/required-and-optional-input.md",
+			"concepts/types-and-decoding.md",
+			"concepts/errors-and-exits.md",
+			"reference/arguments.md",
+			"reference/types.md",
+			"reference/runners.md",
+			"reference/batteries.md",
+			"troubleshooting.md"
 		]
 	}
 }
