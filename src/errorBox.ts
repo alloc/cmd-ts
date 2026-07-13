@@ -1,5 +1,5 @@
+import { stripVTControlCharacters } from "node:util";
 import chalk from "chalk";
-import stripAnsi from "strip-ansi";
 import type { ParsingError } from "./argparser";
 import type { AstNode } from "./newparser/parser";
 import { enumerate, padNoAnsi } from "./utils";
@@ -22,7 +22,7 @@ function highlight(
 
 	function foundError() {
 		if (errorIndex !== undefined) return;
-		errorIndex = stripAnsi(strings.join(" ")).length;
+		errorIndex = stripVTControlCharacters(strings.join(" ")).length;
 	}
 
 	if (error.nodes.length === 0) return;

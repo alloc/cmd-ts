@@ -42,8 +42,7 @@
     "@bomb.sh/tab": "^0.0.19",
     "chalk": "^5.4.1",
     "debug": "^4.4.1",
-    "didyoumean": "^1.2.2",
-    "strip-ansi": "^7.1.0"
+    "didyoumean": "^1.2.2"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

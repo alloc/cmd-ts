@@ -1,4 +1,4 @@
-import stripAnsi from "strip-ansi";
+import { stripVTControlCharacters } from "node:util";
 
 /**
  * @ignore
@@ -8,7 +8,7 @@ export function padNoAnsi(
 	length: number,
 	place: "end" | "start",
 ): string {
-	const noAnsiStr = stripAnsi(str);
+	const noAnsiStr = stripVTControlCharacters(str);
 	if (length < noAnsiStr.length) return str;
 	const pad = Array(length - noAnsiStr.length + 1).join(" ");
 	if (place === "end") {
