@@ -8,7 +8,7 @@ boolean switch.
 
 ```text
 deploy --environment production --verbose
-       └──────── option ────────┘ └─ flag ─┘
+       └─────── option ───────┘ └ flag ─┘
 ```
 
 ## Add a required option
