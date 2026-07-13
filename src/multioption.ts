@@ -1,3 +1,4 @@
+import { styleText } from "node:util";
 import * as Result from "./Result";
 import type {
 	ArgParser,
@@ -12,7 +13,6 @@ import type { OutputOf } from "./from";
 import type { Descriptive, LongDoc, ProvidesHelp, ShortDoc } from "./helpdoc";
 import { findOption } from "./newparser/findOption";
 import type { AstNode } from "./newparser/parser";
-import { styleText } from "./styleText";
 import type { HasType, Type } from "./type";
 
 type MultiOptionConfig<Decoder extends Type<string[], any>> = HasType<Decoder> &

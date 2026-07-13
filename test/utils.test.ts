@@ -1,7 +1,6 @@
-import { stripVTControlCharacters } from "node:util";
+import { stripVTControlCharacters, styleText } from "node:util";
 import { describe, expect, it } from "vitest";
 import { expectTypeOf } from "vitest";
-import { styleText } from "../src/styleText";
 import { type AllOrNothing, padNoAnsi } from "../src/utils";
 
 describe("padNoAnsi", () => {

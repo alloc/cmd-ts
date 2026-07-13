@@ -1,6 +1,6 @@
+import { styleText } from "node:util";
 import type { ParseContext } from "./argparser";
 import type { HelpTopic } from "./helpdoc";
-import { styleText } from "./styleText";
 import { entries, groupBy, padNoAnsi } from "./utils";
 
 /**

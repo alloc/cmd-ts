@@ -1,4 +1,4 @@
-import { styleText } from "./styleText";
+import { styleText } from "node:util";
 
 let mode: "chalk" | "tags" | "disabled" = "chalk";
 

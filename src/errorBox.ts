@@ -1,7 +1,6 @@
-import { stripVTControlCharacters } from "node:util";
+import { stripVTControlCharacters, styleText } from "node:util";
 import type { ParsingError } from "./argparser";
 import type { AstNode } from "./newparser/parser";
-import { styleText } from "./styleText";
 import { enumerate, padNoAnsi } from "./utils";
 
 type HighlightResult = { colorized: string; errorIndex: number };

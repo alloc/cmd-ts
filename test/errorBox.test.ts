@@ -1,10 +1,10 @@
+import { stripVTControlCharacters, styleText } from "node:util";
 import { expect, test } from "vitest";
 import * as Result from "../src/Result";
 import { errorBox } from "../src/errorBox";
 import { parse } from "../src/newparser/parser";
 import { tokenize } from "../src/newparser/tokenizer";
 import { option } from "../src/option";
-import { styleText } from "../src/styleText";
 import { createRegisterOptions } from "./createRegisterOptions";
 import { number } from "./test-types";
 
@@ -122,7 +122,7 @@ test("multiline non-highlight errors are indented", () => {
 		[],
 	);
 
-	expect(errors).toMatchInlineSnapshot(
+	expect(stripVTControlCharacters(errors)).toMatchInlineSnapshot(
 		`
 		"error: found 1 error
 

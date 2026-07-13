@@ -1,3 +1,4 @@
+import { styleText } from "node:util";
 import * as Result from "./Result";
 import type { ArgParser, ParseContext, ParsingResult } from "./argparser";
 import { type CompletionHandler, setCompletionMetadata } from "./completion";
@@ -5,7 +6,6 @@ import type { Default } from "./default";
 import type { OutputOf } from "./from";
 import type { Descriptive, Displayed, ProvidesHelp } from "./helpdoc";
 import type { PositionalArgument } from "./newparser/parser";
-import { styleText } from "./styleText";
 import type { HasType, Type } from "./type";
 import { string } from "./types";
 import type { AllOrNothing } from "./utils";

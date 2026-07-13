@@ -1,3 +1,4 @@
+import { styleText } from "node:util";
 import * as Result from "./Result";
 import type {
 	ArgParser,
@@ -16,7 +17,6 @@ import type {
 	ShortDoc,
 } from "./helpdoc";
 import { findOption } from "./newparser/findOption";
-import { styleText } from "./styleText";
 import type { HasType, Type } from "./type";
 import { string } from "./types";
 import type { AllOrNothing } from "./utils";

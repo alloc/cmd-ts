@@ -1,3 +1,4 @@
+import { styleText } from "node:util";
 import didYouMean from "didyoumean";
 import * as Result from "./Result";
 // import { Runner, Into } from './runner';
@@ -28,7 +29,6 @@ import type {
 } from "./helpdoc";
 import { positional } from "./positional";
 import type { Runner } from "./runner";
-import { styleText } from "./styleText";
 
 type Output<
 	Commands extends Record<string, ArgParser<any> & Runner<any, any>>,

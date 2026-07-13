@@ -8,7 +8,7 @@
  * @packageDocumentation
  */
 
-import { styleText } from "./styleText";
+import { styleText } from "node:util";
 
 /**
  * An effect to exit the program with a message

@@ -1,10 +1,10 @@
+import { styleText } from "node:util";
 import type { ParseContext } from "../argparser";
 import type {
 	CommandHelpData,
 	HelpFormatter,
 	SubcommandsHelpData,
 } from "../helpFormatter";
-import { styleText } from "../styleText";
 
 /**
  * Configuration for the Vercel-style help formatter
