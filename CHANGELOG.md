@@ -1,5 +1,11 @@
 # cmd-ts
 
+## 0.16.0
+
+### Minor Changes
+
+- f12f091: Add first-class `@bomb.sh/tab` shell completion support to commands by default, including semantic completion for nested subcommands, aliases, flags, options, positional arguments, and custom value suggestions.
+
 ## 0.15.0
 
 ### Minor Changes
