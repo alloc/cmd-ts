@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import didYouMean from "didyoumean";
 import * as Result from "./Result";
 // import { Runner, Into } from './runner';
@@ -29,6 +28,7 @@ import type {
 } from "./helpdoc";
 import { positional } from "./positional";
 import type { Runner } from "./runner";
+import { styleText } from "./styleText";
 
 type Output<
 	Commands extends Record<string, ArgParser<any> & Runner<any, any>>,
@@ -89,7 +89,7 @@ export function subcommands<
 				const option = Array.isArray(closeOptions)
 					? closeOptions[0]
 					: closeOptions;
-				errorMessage += `\nDid you mean ${chalk.italic(option)}?`;
+				errorMessage += `\nDid you mean ${styleText("italic", option)}?`;
 			}
 
 			throw new Error(errorMessage);

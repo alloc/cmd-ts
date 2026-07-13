@@ -1,10 +1,10 @@
-import chalk from "chalk";
 import type { ParseContext } from "../argparser";
 import type {
 	CommandHelpData,
 	HelpFormatter,
 	SubcommandsHelpData,
 } from "../helpFormatter";
+import { styleText } from "../styleText";
 
 /**
  * Configuration for the Vercel-style help formatter
@@ -79,17 +79,17 @@ export function createVercelFormatter(
 			if (data.version) {
 				header += ` ${data.version}`;
 			}
-			lines.push(chalk.grey(header));
+			lines.push(styleText("grey", header));
 
 			// Command usage line
 			lines.push("");
 			const path = data.path.length > 0 ? data.path.join(" ") : data.name;
-			lines.push(`${logo} ${chalk.bold(path)} [options]`);
+			lines.push(`${logo} ${styleText("bold", path)} [options]`);
 
 			// Description
 			if (data.description) {
 				lines.push("");
-				lines.push(chalk.dim(data.description));
+				lines.push(styleText("dim", data.description));
 			}
 
 			// Group help topics by category
@@ -103,7 +103,7 @@ export function createVercelFormatter(
 			// Render each category
 			for (const [category, topics] of byCategory) {
 				lines.push("");
-				lines.push(chalk.dim(`${capitalize(category)}:`));
+				lines.push(styleText("dim", `${capitalize(category)}:`));
 				lines.push("");
 
 				// Calculate max width for alignment
@@ -112,10 +112,10 @@ export function createVercelFormatter(
 				for (const topic of topics) {
 					const defaults =
 						topic.defaults.length > 0
-							? chalk.dim(` [${topic.defaults.join(", ")}]`)
+							? styleText("dim", ` [${topic.defaults.join(", ")}]`)
 							: "";
 					lines.push(
-						`    ${topic.usage.padEnd(maxUsageWidth + 2)}${chalk.dim(topic.description)}${defaults}`,
+						`    ${topic.usage.padEnd(maxUsageWidth + 2)}${styleText("dim", topic.description)}${defaults}`,
 					);
 				}
 			}
@@ -123,13 +123,13 @@ export function createVercelFormatter(
 			// Examples
 			if (data.examples && data.examples.length > 0) {
 				lines.push("");
-				lines.push(chalk.dim("Examples:"));
+				lines.push(styleText("dim", "Examples:"));
 
 				for (const example of data.examples) {
 					lines.push("");
-					lines.push(`${chalk.gray("–")} ${example.description}`);
+					lines.push(`${styleText("gray", "–")} ${example.description}`);
 					lines.push("");
-					lines.push(chalk.cyan(`  $ ${example.command}`));
+					lines.push(styleText("cyan", `  $ ${example.command}`));
 				}
 			}
 
@@ -147,24 +147,24 @@ export function createVercelFormatter(
 
 			// Header
 			if (data.version) {
-				lines.push(chalk.grey(`${displayName} ${data.version}`));
+				lines.push(styleText("grey", `${displayName} ${data.version}`));
 			} else {
-				lines.push(chalk.grey(displayName));
+				lines.push(styleText("grey", displayName));
 			}
 
 			// Command usage line
 			lines.push("");
-			lines.push(`${logo} ${chalk.bold(path)} [options] <command>`);
+			lines.push(`${logo} ${styleText("bold", path)} [options] <command>`);
 
 			// Help hint
 			lines.push("");
 			lines.push(
-				chalk.dim(`For command help, run \`${path} <command> --help\``),
+				styleText("dim", `For command help, run \`${path} <command> --help\``),
 			);
 
 			// Commands section
 			lines.push("");
-			lines.push(chalk.dim("Commands:"));
+			lines.push(styleText("dim", "Commands:"));
 			lines.push("");
 
 			// Calculate column widths
@@ -182,20 +182,20 @@ export function createVercelFormatter(
 				const argHint = argHints[i];
 
 				lines.push(
-					`    ${displayCommandName.padEnd(maxNameWidth + 2)}${chalk.dim(argHint.padEnd(maxArgWidth + 2))}${chalk.dim(cmd.description ?? "")}`,
+					`    ${displayCommandName.padEnd(maxNameWidth + 2)}${styleText("dim", argHint.padEnd(maxArgWidth + 2))}${styleText("dim", cmd.description ?? "")}`,
 				);
 			}
 
 			// Examples
 			if (data.examples && data.examples.length > 0) {
 				lines.push("");
-				lines.push(chalk.dim("Examples:"));
+				lines.push(styleText("dim", "Examples:"));
 
 				for (const example of data.examples) {
 					lines.push("");
-					lines.push(`${chalk.gray("–")} ${example.description}`);
+					lines.push(`${styleText("gray", "–")} ${example.description}`);
 					lines.push("");
-					lines.push(chalk.cyan(`  $ ${example.command}`));
+					lines.push(styleText("cyan", `  $ ${example.command}`));
 				}
 			}
 

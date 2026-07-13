@@ -1,4 +1,4 @@
-import chalk, { type ChalkInstance } from "chalk";
+import { styleText } from "./styleText";
 
 let mode: "chalk" | "tags" | "disabled" = "chalk";
 
@@ -76,10 +76,9 @@ function generateColoredBody<T>(
 	return c;
 }
 
-const chalked = generateColoredBody({}, [], (levels, str) => {
-	const color = levels.reduce<ChalkInstance>((c, curr) => c[curr], chalk);
-	return color(str);
-});
+const styled = generateColoredBody({}, [], (levels, str) =>
+	styleText(levels, str),
+);
 
 const tagged = generateColoredBody({}, [], (levels, str) => {
 	const [start, end] = levels.reduce(
@@ -96,7 +95,7 @@ const tagged = generateColoredBody({}, [], (levels, str) => {
 const disabled = generateColoredBody({}, [], (_levels, str) => str);
 
 export function colored(): Colored {
-	if (mode === "chalk") return chalked;
+	if (mode === "chalk") return styled;
 	if (mode === "disabled") return disabled;
 	return tagged;
 }

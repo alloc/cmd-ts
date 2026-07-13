@@ -1,6 +1,6 @@
-import chalk from "chalk";
 import type { ParseContext } from "./argparser";
 import type { HelpTopic } from "./helpdoc";
+import { styleText } from "./styleText";
 import { entries, groupBy, padNoAnsi } from "./utils";
 
 /**
@@ -116,16 +116,16 @@ export const defaultHelpFormatter: HelpFormatter = {
 		const lines: string[] = [];
 
 		let name = data.path.length > 0 ? data.path.join(" ") : data.name;
-		name = chalk.bold(name);
+		name = styleText("bold", name);
 
 		if (data.version) {
-			name += ` ${chalk.dim(data.version)}`;
+			name += ` ${styleText("dim", data.version)}`;
 		}
 
 		lines.push(name);
 
 		if (data.description) {
-			lines.push(chalk.dim("> ") + data.description);
+			lines.push(styleText("dim", "> ") + data.description);
 		}
 
 		const usageBreakdown = groupBy(data.helpTopics, (x) => x.category);
@@ -142,7 +142,7 @@ export const defaultHelpFormatter: HelpFormatter = {
 				line += " - ";
 				line += helpTopic.description;
 				for (const defaultValue of helpTopic.defaults) {
-					line += chalk.dim(` [${defaultValue}]`);
+					line += styleText("dim", ` [${defaultValue}]`);
 				}
 				lines.push(line);
 			}
@@ -154,7 +154,7 @@ export const defaultHelpFormatter: HelpFormatter = {
 			for (const example of data.examples) {
 				lines.push("");
 				lines.push(`  ${example.description}`);
-				lines.push(chalk.dim(`  $ ${example.command}`));
+				lines.push(styleText("dim", `  $ ${example.command}`));
 			}
 		}
 
@@ -165,14 +165,16 @@ export const defaultHelpFormatter: HelpFormatter = {
 		const lines: string[] = [];
 		const argsSoFar = data.path.length > 0 ? data.path.join(" ") : data.name;
 
-		lines.push(chalk.bold(argsSoFar + chalk.italic(" <subcommand>")));
+		lines.push(
+			styleText("bold", argsSoFar + styleText("italic", " <subcommand>")),
+		);
 
 		if (data.description) {
-			lines.push(chalk.dim("> ") + data.description);
+			lines.push(styleText("dim", "> ") + data.description);
 		}
 
 		lines.push("");
-		lines.push(`where ${chalk.italic("<subcommand>")} can be one of:`);
+		lines.push(`where ${styleText("italic", "<subcommand>")} can be one of:`);
 		lines.push("");
 
 		for (const cmd of data.commands) {
@@ -181,16 +183,18 @@ export const defaultHelpFormatter: HelpFormatter = {
 			if (cmd.aliases?.length) {
 				const aliasTxt = cmd.aliases.length === 1 ? "alias" : "aliases";
 				const aliases = cmd.aliases.join(", ");
-				description += chalk.dim(`[${aliasTxt}: ${aliases}]`);
+				description += styleText("dim", `[${aliasTxt}: ${aliases}]`);
 			}
-			const row = chalk.dim("- ") + cmd.name + description;
+			const row = styleText("dim", "- ") + cmd.name + description;
 			lines.push(row.trim());
 		}
 
-		const helpCommand = chalk.yellow(`${argsSoFar} <subcommand> --help`);
+		const helpCommand = styleText("yellow", `${argsSoFar} <subcommand> --help`);
 
 		lines.push("");
-		lines.push(chalk.dim(`For more help, try running \`${helpCommand}\``));
+		lines.push(
+			styleText("dim", `For more help, try running \`${helpCommand}\``),
+		);
 
 		if (data.examples && data.examples.length > 0) {
 			lines.push("");
@@ -198,7 +202,7 @@ export const defaultHelpFormatter: HelpFormatter = {
 			for (const example of data.examples) {
 				lines.push("");
 				lines.push(`  ${example.description}`);
-				lines.push(chalk.dim(`  $ ${example.command}`));
+				lines.push(styleText("dim", `  $ ${example.command}`));
 			}
 		}
 

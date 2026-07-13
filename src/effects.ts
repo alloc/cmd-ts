@@ -8,7 +8,7 @@
  * @packageDocumentation
  */
 
-import chalk from "chalk";
+import { styleText } from "./styleText";
 
 /**
  * An effect to exit the program with a message
@@ -41,7 +41,8 @@ export class Exit {
 
 	dryRun(): string {
 		const { into, message, exitCode } = this.config;
-		const coloredExit = chalk.dim(
+		const coloredExit = styleText(
+			"dim",
 			`process exited with status ${exitCode} (${into})`,
 		);
 		return `${message}\n\n${coloredExit}`;

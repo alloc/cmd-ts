@@ -4,6 +4,9 @@
   "homepage": "https://alloc.github.io/cmd-ts/",
   "license": "MIT",
   "author": "Gal Schlezinger",
+  "engines": {
+    "node": ">=20.12.0"
+  },
   "main": "dist/cjs/index.js",
   "typings": "dist/cjs/index.d.ts",
   "module": "dist/esm/index.js",
@@ -40,7 +43,6 @@
   },
   "dependencies": {
     "@bomb.sh/tab": "^0.0.19",
-    "chalk": "^5.4.1",
     "didyoumean": "^1.2.2",
     "obug": "^2.1.3"
   },

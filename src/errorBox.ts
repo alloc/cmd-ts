@@ -1,7 +1,7 @@
 import { stripVTControlCharacters } from "node:util";
-import chalk from "chalk";
 import type { ParsingError } from "./argparser";
 import type { AstNode } from "./newparser/parser";
+import { styleText } from "./styleText";
 import { enumerate, padNoAnsi } from "./utils";
 
 type HighlightResult = { colorized: string; errorIndex: number };
@@ -30,27 +30,27 @@ function highlight(
 	nodes.forEach((node) => {
 		if (error.nodes.includes(node)) {
 			foundError();
-			return strings.push(chalk.red(node.raw));
+			return strings.push(styleText("red", node.raw));
 		}
 		if (node.type === "shortOptions") {
 			let failed = false;
 			let s = "";
 			for (const option of node.options) {
 				if (error.nodes.includes(option)) {
-					s += chalk.red(option.raw);
+					s += styleText("red", option.raw);
 					failed = true;
 				} else {
-					s += chalk.dim(option.raw);
+					s += styleText("dim", option.raw);
 				}
 			}
-			const prefix = failed ? chalk.red("-") : chalk.dim("-");
+			const prefix = failed ? styleText("red", "-") : styleText("dim", "-");
 			if (failed) {
 				foundError();
 			}
 			return strings.push(prefix + s);
 		}
 
-		return strings.push(chalk.dim(node.raw));
+		return strings.push(styleText("dim", node.raw));
 	});
 
 	return { colorized: strings.join(" "), errorIndex: errorIndex ?? 0 };
@@ -80,7 +80,7 @@ export function errorBox(
 	const maxNumberWidth = String(withHighlight.length).length;
 
 	errorMessages.push(
-		`${chalk.red.bold("error: ")}found ${chalk.yellow(withHighlight.length)} error${withHighlight.length > 1 ? "s" : ""}`,
+		`${styleText(["red", "bold"], "error: ")}found ${styleText("yellow", String(withHighlight.length))} error${withHighlight.length > 1 ? "s" : ""}`,
 	);
 	errorMessages.push("");
 
@@ -95,8 +95,8 @@ export function errorBox(
 
 			errorMessages.push(`  ${x.highlighted.colorized}`);
 			for (const [index, line] of enumerate(x.message.split("\n"))) {
-				const prefix = index === 0 ? chalk.bold("^") : " ";
-				const msg = chalk.red(`  ${pad} ${prefix} ${line}`);
+				const prefix = index === 0 ? styleText("bold", "^") : " ";
+				const msg = styleText("red", `  ${pad} ${prefix} ${line}`);
 				errorMessages.push(msg);
 			}
 			errorMessages.push("");
@@ -114,24 +114,25 @@ export function errorBox(
 	}
 
 	withNoHighlight.forEach(({ message }) => {
-		const num = chalk.red.bold(
+		const num = styleText(
+			["red", "bold"],
 			`${padNoAnsi(number.toString(), maxNumberWidth, "start")}.`,
 		);
 		const lines = message.split("\n");
-		errorMessages.push(`  ${num} ${chalk.red(lines[0] ?? "")}`);
+		errorMessages.push(`  ${num} ${styleText("red", lines[0] ?? "")}`);
 		for (const line of lines.slice(1)) {
 			errorMessages.push(
-				` ${"".padStart(maxNumberWidth + 1)}  ${chalk.red(line)}`,
+				` ${"".padStart(maxNumberWidth + 1)}  ${styleText("red", line)}`,
 			);
 		}
 		number++;
 	});
 
-	const helpCmd = chalk.yellow(`${breadcrumbs.join(" ")} --help`);
+	const helpCmd = styleText("yellow", `${breadcrumbs.join(" ")} --help`);
 
 	errorMessages.push("");
 	errorMessages.push(
-		`${chalk.red.bold("hint: ")}for more information, try '${helpCmd}'`,
+		`${styleText(["red", "bold"], "hint: ")}for more information, try '${helpCmd}'`,
 	);
 
 	return errorMessages.join("\n");

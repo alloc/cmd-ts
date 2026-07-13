@@ -1,7 +1,7 @@
 import { stripVTControlCharacters } from "node:util";
-import chalk from "chalk";
 import { describe, expect, it } from "vitest";
 import { expectTypeOf } from "vitest";
+import { styleText } from "../src/styleText";
 import { type AllOrNothing, padNoAnsi } from "../src/utils";
 
 describe("padNoAnsi", () => {
@@ -9,11 +9,11 @@ describe("padNoAnsi", () => {
 		const expected = "hello".padStart(10, " ");
 		const actual = padNoAnsi(
 			[
-				chalk.red("h"),
-				chalk.cyan("e"),
-				chalk.blue("l"),
-				chalk.green("l"),
-				chalk.red("o"),
+				styleText("red", "h"),
+				styleText("cyan", "e"),
+				styleText("blue", "l"),
+				styleText("green", "l"),
+				styleText("red", "o"),
 			].join(""),
 			10,
 			"start",
@@ -24,11 +24,11 @@ describe("padNoAnsi", () => {
 		const expected = "hello".padEnd(10, " ");
 		const actual = padNoAnsi(
 			[
-				chalk.red("h"),
-				chalk.cyan("e"),
-				chalk.blue("l"),
-				chalk.green("l"),
-				chalk.red("o"),
+				styleText("red", "h"),
+				styleText("cyan", "e"),
+				styleText("blue", "l"),
+				styleText("green", "l"),
+				styleText("red", "o"),
 			].join(""),
 			10,
 			"end",
@@ -36,7 +36,13 @@ describe("padNoAnsi", () => {
 		expect(stripVTControlCharacters(actual)).toEqual(expected);
 	});
 	it("returns the string if it is shorter than the padding", () => {
-		const str = chalk`{red h}{cyan e}{blue l}{green l}{red o}`;
+		const str = [
+			styleText("red", "h"),
+			styleText("cyan", "e"),
+			styleText("blue", "l"),
+			styleText("green", "l"),
+			styleText("red", "o"),
+		].join("");
 		const actual = padNoAnsi(str, 2, "end");
 		expect(actual).toEqual(str);
 	});

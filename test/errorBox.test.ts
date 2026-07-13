@@ -1,10 +1,10 @@
-import chalk from "chalk";
 import { expect, test } from "vitest";
 import * as Result from "../src/Result";
 import { errorBox } from "../src/errorBox";
 import { parse } from "../src/newparser/parser";
 import { tokenize } from "../src/newparser/tokenizer";
 import { option } from "../src/option";
+import { styleText } from "../src/styleText";
 import { createRegisterOptions } from "./createRegisterOptions";
 import { number } from "./test-types";
 
@@ -55,7 +55,7 @@ test("works for a short flag", async () => {
 	}
 
 	const errors = errorBox(tree, result.error.errors, []);
-	expect(errors).toMatch(chalk.red("n not_a_number"));
+	expect(errors).toMatch(styleText("red", "n not_a_number"));
 });
 
 test("works for a single node", async () => {

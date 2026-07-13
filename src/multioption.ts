@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import * as Result from "./Result";
 import type {
 	ArgParser,
@@ -13,6 +12,7 @@ import type { OutputOf } from "./from";
 import type { Descriptive, LongDoc, ProvidesHelp, ShortDoc } from "./helpdoc";
 import { findOption } from "./newparser/findOption";
 import type { AstNode } from "./newparser/parser";
+import { styleText } from "./styleText";
 import type { HasType, Type } from "./type";
 
 type MultiOptionConfig<Decoder extends Type<string[], any>> = HasType<Decoder> &
@@ -45,7 +45,9 @@ export function multioption<Decoder extends Type<string[], any>>(
 				try {
 					const defaultValue = config.defaultValue();
 					if (config.defaultValueIsSerializable) {
-						defaults.push(`default: ${chalk.italic(defaultValue)}`);
+						defaults.push(
+							`default: ${styleText("italic", String(defaultValue))}`,
+						);
 					} else {
 						defaults.push("[...optional]");
 					}
@@ -54,7 +56,9 @@ export function multioption<Decoder extends Type<string[], any>>(
 				try {
 					const defaultValue = config.type.defaultValue();
 					if (config.type.defaultValueIsSerializable) {
-						defaults.push(`default: ${chalk.italic(defaultValue)}`);
+						defaults.push(
+							`default: ${styleText("italic", String(defaultValue))}`,
+						);
 					} else {
 						defaults.push("[...optional]");
 					}

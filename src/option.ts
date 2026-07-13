@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import * as Result from "./Result";
 import type {
 	ArgParser,
@@ -17,6 +16,7 @@ import type {
 	ShortDoc,
 } from "./helpdoc";
 import { findOption } from "./newparser/findOption";
+import { styleText } from "./styleText";
 import type { HasType, Type } from "./type";
 import { string } from "./types";
 import type { AllOrNothing } from "./utils";
@@ -46,7 +46,7 @@ function fullOption<Decoder extends Type<string, any>>(
 				const env =
 					process.env[config.env] === undefined
 						? ""
-						: `=${chalk.italic(process.env[config.env])}`;
+						: `=${styleText("italic", String(process.env[config.env]))}`;
 				defaults.push(`env: ${config.env}${env}`);
 			}
 
@@ -54,7 +54,9 @@ function fullOption<Decoder extends Type<string, any>>(
 				try {
 					const defaultValue = config.defaultValue();
 					if (config.defaultValueIsSerializable) {
-						defaults.push(`default: ${chalk.italic(defaultValue)}`);
+						defaults.push(
+							`default: ${styleText("italic", String(defaultValue))}`,
+						);
 					} else {
 						defaults.push("optional");
 					}
@@ -63,7 +65,9 @@ function fullOption<Decoder extends Type<string, any>>(
 				try {
 					const defaultValue = config.type.defaultValue();
 					if (config.type.defaultValueIsSerializable) {
-						defaults.push(`default: ${chalk.italic(defaultValue)}`);
+						defaults.push(
+							`default: ${styleText("italic", String(defaultValue))}`,
+						);
 					} else {
 						defaults.push("optional");
 					}
@@ -118,7 +122,7 @@ function fullOption<Decoder extends Type<string, any>>(
 				rawValue = option.value.node.raw;
 			} else if (valueFromEnv !== undefined) {
 				rawValue = valueFromEnv;
-				envPrefix = `env[${chalk.italic(config.env)}]: `;
+				envPrefix = `env[${styleText("italic", String(config.env))}]: `;
 			} else if (defaultValueFn) {
 				try {
 					const defaultValue = defaultValueFn();
