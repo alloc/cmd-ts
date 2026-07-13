@@ -1,5 +1,15 @@
 # cmd-ts
 
+## 0.17.0
+
+### Minor Changes
+
+- f9e2e54: Require Node.js 20.18 or newer. This release no longer supports older Node.js versions.
+
+### Patch Changes
+
+- f9e2e54: Reduce the runtime dependency footprint by replacing `chalk`, `debug`, and `strip-ansi` with Node.js platform utilities and `obug`.
+
 ## 0.16.0
 
 ### Minor Changes
