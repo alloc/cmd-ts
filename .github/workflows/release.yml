@@ -39,15 +39,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-          package-manager-cache: false
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+          cache: pnpm
 
       - name: Install git-cliff
         uses: taiki-e/install-action@git-cliff
@@ -93,7 +93,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.version.outputs.should_release == 'true'
-        run: bun install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Bump package version
         if: steps.version.outputs.should_release == 'true'
@@ -101,7 +101,7 @@ jobs:
 
       - name: Build
         if: steps.version.outputs.should_release == 'true'
-        run: bun run --if-present build
+        run: pnpm run --if-present build
 
       - name: Commit release updates
         if: steps.version.outputs.should_release == 'true'

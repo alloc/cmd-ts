@@ -14,20 +14,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: bun run --if-present lint
+        run: pnpm run --if-present lint
 
       - name: Typecheck
-        run: bun run --if-present typecheck
+        run: pnpm run --if-present typecheck
 
       - name: Test
-        run: bun run --if-present test
+        run: pnpm run --if-present test
 
       - name: Build
-        run: bun run --if-present build
+        run: pnpm run --if-present build
